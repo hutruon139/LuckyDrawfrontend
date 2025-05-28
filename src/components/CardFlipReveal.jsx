@@ -83,11 +83,6 @@ const CardFlipReveal = forwardRef(({ isRevealing, prizeResult, onRevealComplete 
           <h2 className="text-4xl font-bold text-white mb-4">
             {countdown > 0 ? `${countdown}` : isFlipped ? '🎉 KẾT QUẢ 🎉' : '🎴 CHUẨN BỊ...'}
           </h2>
-          <p className="text-xl text-blue-200">
-            {countdown > 0 ? 'Đang đếm ngược để tiết lộ...' : 
-             isFlipped ? 'Chúc mừng! Đây là phần thưởng của bạn!' :
-             'Thẻ may mắn sắp được lật... Hãy chuẩn bị!'}
-          </p>
         </div>
 
         {/* Card Container */}
@@ -125,17 +120,13 @@ const CardFlipReveal = forwardRef(({ isRevealing, prizeResult, onRevealComplete 
                 
                 {/* Main content */}
                 <div className="text-center z-10">
-                  <div className="text-6xl mb-4 animate-pulse">❓</div>
-                  <h3 className="text-2xl font-bold mb-2">Lucky Card</h3>
-                  <p className="text-lg opacity-90">Phần thưởng đặc biệt</p>
-                  <p className="text-sm mt-4 opacity-70">Đang đếm ngược để tiết lộ...</p>
                   
                   {/* Animated dots for suspense */}
-                  <div className="flex justify-center space-x-1 mt-4">
+                  {/* <div className="flex justify-center space-x-1 mt-4">
                     <div className="w-2 h-2 bg-white/60 rounded-full animate-bounce" style={{animationDelay: '0ms'}}></div>
                     <div className="w-2 h-2 bg-white/60 rounded-full animate-bounce" style={{animationDelay: '200ms'}}></div>
                     <div className="w-2 h-2 bg-white/60 rounded-full animate-bounce" style={{animationDelay: '400ms'}}></div>
-                  </div>
+                  </div> */}
                 </div>
 
                 {/* Decorative elements */}
