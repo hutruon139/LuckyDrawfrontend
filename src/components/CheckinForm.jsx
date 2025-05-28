@@ -75,7 +75,7 @@ const CheckinForm = ({
             disabled={loading || !checkinData.name || !checkinData.phone}
             className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white text-lg font-bold py-4 rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? '🎰 Đang xử lý...' : '🎲 CHECK-IN & SPIN!'}
+            {loading ? '🎰 Đang xử lý...' : '🎲 CHECK-IN'}
           </button>
         </div>
 

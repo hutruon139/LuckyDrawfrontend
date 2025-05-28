@@ -9,10 +9,10 @@ const WelcomeScreen = ({ prizeStats, onStartClick }) => {
         <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 mb-8 border border-white/20">
           <Gift className="h-16 w-16 text-yellow-400 mx-auto mb-6 animate-bounce" />
           <h2 className="text-3xl font-bold text-white mb-4">
-            Chào mừng đến với Lucky Spin!
+            Chào mừng đến với Lucky Draw!
           </h2>
           <p className="text-xl text-blue-200 mb-6">
-            Check-in và quay bánh xe để biết bạn sẽ nhận được gì!
+            Check-in để biết bạn sẽ nhận được gì!
           </p>
 
           {/* Prize explanation with current stats */}

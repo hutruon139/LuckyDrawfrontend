@@ -193,12 +193,12 @@ const App = () => {
           <div className="flex items-center justify-center space-x-3 mb-2">
             <Trophy className="h-10 w-10 text-yellow-400" />
             <h1 className="text-4xl md:text-5xl font-bold text-white">
-              Lucky Card Challenge
+              Lucky Draw Challenge
             </h1>
             <Trophy className="h-10 w-10 text-yellow-400" />
           </div>
           <p className="text-lg text-blue-200">
-            Check-in và lật thẻ may mắn để nhận thử thách!
+            Check-in để nhận thử thách!
           </p>
 
           {/* Admin button */}
