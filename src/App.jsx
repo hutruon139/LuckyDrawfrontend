@@ -203,7 +203,7 @@ const App = () => {
           <div className="flex items-center justify-center space-x-3 mb-2">
             <Trophy className="h-10 w-10 text-yellow-400" />
             <h1 className="text-4xl md:text-5xl font-bold text-white">
-              Lucky Wheel Challenge
+              Lucky Draw Challenge
             </h1>
             <Trophy className="h-10 w-10 text-yellow-400" />
           </div>
