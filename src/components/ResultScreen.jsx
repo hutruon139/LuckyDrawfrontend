@@ -31,7 +31,7 @@ const ResultScreen = ({ spinResult, checkinData, onNewFamily, onGoHome }) => {
           </h3>
           <p className="text-xl text-white/90">
             {spinResult.challenges === 0
-              ? 'Chúc mừng! Bạn nhận quà miễn phí!'
+              ? 'Chúc mừng bạn đã nhận được phần thưởng!'
               : `Hoàn thành ${spinResult.challenges} thử thách để nhận quà!`}
           </p>
         </div>

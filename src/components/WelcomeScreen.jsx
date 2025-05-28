@@ -2,7 +2,7 @@
 import React from 'react';
 import { Gift } from 'lucide-react';
 
-const WelcomeScreen = ({ prizeStats, onStartClick }) => {
+const WelcomeScreen = ({ onStartClick }) => {
   return (
     <div className="max-w-4xl mx-auto px-4">
       <div className="text-center mb-8">
@@ -22,7 +22,6 @@ const WelcomeScreen = ({ prizeStats, onStartClick }) => {
               <div className="text-green-300 font-semibold">FREE GIFT</div>
               <div className="text-sm text-green-200">Nhận quà ngay!</div>
               <div className="text-xs text-green-400 mt-1">
-                {prizeStats.group1.current}/{prizeStats.group1.limit} đã trao
               </div>
             </div>
             <div className="bg-blue-500/20 rounded-xl p-4 border border-blue-500/30">
@@ -30,7 +29,6 @@ const WelcomeScreen = ({ prizeStats, onStartClick }) => {
               <div className="text-blue-300 font-semibold">1 CHALLENGE</div>
               <div className="text-sm text-blue-200">1 thử thách = Quà</div>
               <div className="text-xs text-blue-400 mt-1">
-                {prizeStats.group2.current}/{prizeStats.group2.limit} đã trao
               </div>
             </div>
             <div className="bg-purple-500/20 rounded-xl p-4 border border-purple-500/30">
@@ -38,7 +36,6 @@ const WelcomeScreen = ({ prizeStats, onStartClick }) => {
               <div className="text-purple-300 font-semibold">2 CHALLENGES</div>
               <div className="text-sm text-purple-200">2 thử thách = Quà lớn</div>
               <div className="text-xs text-purple-400 mt-1">
-                {prizeStats.group3.current}/{prizeStats.group3.limit} đã trao
               </div>
             </div>
             <div className="bg-red-500/20 rounded-xl p-4 border border-red-500/30">
@@ -46,7 +43,6 @@ const WelcomeScreen = ({ prizeStats, onStartClick }) => {
               <div className="text-red-300 font-semibold">3 CHALLENGES</div>
               <div className="text-sm text-red-200">3 thử thách = Quà VIP</div>
               <div className="text-xs text-red-400 mt-1">
-                {prizeStats.group4.current}/{prizeStats.group4.limit} đã trao
               </div>
             </div>
           </div>

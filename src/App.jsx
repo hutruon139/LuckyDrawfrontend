@@ -1,11 +1,11 @@
-// App.jsx - FIXED VERSION
+// App.jsx - WITH WHEEL SPINNER SYSTEM
 import React, { useState, useRef } from 'react';
 import { Trophy, Star } from 'lucide-react';
 
 // Components
 import WelcomeScreen from './components/WelcomeScreen';
 import CheckinForm from './components/CheckinForm';
-import CardFlipReveal from './components/CardFlipReveal';
+import WheelSpinner from './components/WheelSpinner'; // NEW: Replace CardFlipReveal
 import ResultScreen from './components/ResultScreen';
 import AdminPanel from './components/AdminPanel';
 import AdminLogin from './components/AdminLogin';
@@ -23,7 +23,7 @@ const App = () => {
   // State management
   const [currentStep, setCurrentStep] = useState('welcome');
   const [checkinData, setCheckinData] = useState(INITIAL_CHECKIN_DATA);
-  const [isRevealing, setIsRevealing] = useState(false);
+  const [isSpinning, setIsSpinning] = useState(false); // Changed from isRevealing
   const [prizeResult, setPrizeResult] = useState(null);
   const [message, setMessage] = useState('');
   const [families, setFamilies] = useState([]);
@@ -35,25 +35,25 @@ const App = () => {
   const { loading, executeRequest } = useAPI();
 
   // Refs
-  const cardRef = useRef(null);
+  const wheelRef = useRef(null); // Changed from cardRef
 
-  // Reset card and go to welcome
+  // Reset wheel and go to welcome
   const resetToWelcome = () => {
     setCurrentStep('welcome');
     setCheckinData(INITIAL_CHECKIN_DATA);
     setPrizeResult(null);
     setMessage('');
-    setIsRevealing(false);
-    if (cardRef.current) {
-      cardRef.current.reset();
+    setIsSpinning(false);
+    if (wheelRef.current) {
+      wheelRef.current.reset();
     }
   };
 
-  // Handle check-in and card reveal
-  const handleCheckinAndReveal = async () => {
+  // Handle check-in and wheel spin
+  const handleCheckinAndSpin = async () => {
     try {
       setMessage('');
-      console.log('🎯 Starting check-in and reveal process...');
+      console.log('🎯 Starting check-in and spin process...');
 
       // Refresh prize stats first
       await refetchPrizeStats();
@@ -69,21 +69,25 @@ const App = () => {
       const riggedResult = determineRiggedResult(prizeStats);
       console.log('🎰 Rigged result determined:', riggedResult);
 
-      // Set up the card reveal
+      // Set up the wheel spin
       setPrizeResult({
         ...riggedResult,
         familyData: checkinResult.data,
       });
 
-      // Start card reveal animation
-      setCurrentStep('reveal');
-      setIsRevealing(true);
+      // Start wheel spin
+      setCurrentStep('spin'); // Changed from 'reveal'
+      setIsSpinning(true);
 
-      // Update family with result in database - FIXED VERSION
+      // Start the wheel animation
+      if (wheelRef.current) {
+        wheelRef.current.startSpin(riggedResult);
+      }
+
+      // Update family with result in database
       try {
         console.log('💾 Updating family spin result in database...');
         
-        // Use the correct API service method instead of manual fetch
         await executeRequest(() =>
           apiService.updateFamilySpin(checkinResult.data._id, {
             spinResult: riggedResult.group,
@@ -94,29 +98,35 @@ const App = () => {
         console.log('💾 Database updated successfully');
       } catch (updateError) {
         console.error('❌ Failed to update database:', updateError);
-        // Don't throw here - let the user experience continue
         setMessage('⚠️ Cập nhật cơ sở dữ liệu thất bại, nhưng kết quả vẫn hợp lệ');
       }
 
-      // Update stats after successful reveal
+      // Update stats after successful spin
       await refetchPrizeStats();
-      console.log('🎉 Reveal process completed successfully!');
+      console.log('🎉 Spin process completed successfully!');
 
     } catch (error) {
-      console.error('❌ Reveal process failed:', error);
+      console.error('❌ Spin process failed:', error);
       setMessage(`❌ ${error.message}`);
-      setIsRevealing(false);
+      setIsSpinning(false);
     }
   };
 
-  // Handle when card reveal is complete
-  const handleRevealComplete = () => {
-    console.log('🎴 Card reveal animation completed');
-    setIsRevealing(false);
-    // Longer delay before showing result screen - let them enjoy the moment
+  // Handle when wheel spin is complete
+  const handleSpinComplete = (segmentResult) => {
+    console.log('🎡 Wheel spin animation completed:', segmentResult);
+    setIsSpinning(false);
+    // Delay before showing result screen
     setTimeout(() => {
       setCurrentStep('result');
-    }, 2000); // Extended from 1000ms to 2000ms
+    }, 2000);
+  };
+
+  // Handle wheel spin start (triggered by wheel button)
+  const handleSpinStart = () => {
+    // This is called when user clicks the wheel
+    // The actual logic is in handleCheckinAndSpin
+    console.log('🎡 Wheel spin started by user');
   };
 
   // Admin functions
@@ -193,12 +203,12 @@ const App = () => {
           <div className="flex items-center justify-center space-x-3 mb-2">
             <Trophy className="h-10 w-10 text-yellow-400" />
             <h1 className="text-4xl md:text-5xl font-bold text-white">
-              Lucky Draw Challenge
+              Lucky Wheel Challenge
             </h1>
             <Trophy className="h-10 w-10 text-yellow-400" />
           </div>
           <p className="text-lg text-blue-200">
-            Check-in để nhận thử thách!
+            Check-in và quay vòng may mắn để nhận thử thách!
           </p>
 
           {/* Admin button */}
@@ -214,7 +224,6 @@ const App = () => {
         <main>
           {currentStep === 'welcome' && (
             <WelcomeScreen
-              prizeStats={prizeStats}
               onStartClick={() => setCurrentStep('checkin')}
             />
           )}
@@ -223,19 +232,20 @@ const App = () => {
             <CheckinForm
               checkinData={checkinData}
               setCheckinData={setCheckinData}
-              onSubmit={handleCheckinAndReveal}
+              onSubmit={handleCheckinAndSpin} // Changed from handleCheckinAndReveal
               onBack={() => setCurrentStep('welcome')}
               loading={loading}
               message={message}
             />
           )}
 
-          {currentStep === 'reveal' && (
-            <CardFlipReveal
-              ref={cardRef}
-              isRevealing={isRevealing}
+          {currentStep === 'spin' && ( // Changed from 'reveal'
+            <WheelSpinner
+              ref={wheelRef}
+              isSpinning={isSpinning}
               prizeResult={prizeResult}
-              onRevealComplete={handleRevealComplete}
+              onSpinComplete={handleSpinComplete}
+              onSpinStart={handleSpinStart}
             />
           )}
 
@@ -268,15 +278,8 @@ const App = () => {
           onCancel={handleAdminCancel}
         />
 
-        {/* Debug Panel - Remove in production */}
-        {process.env.NODE_ENV === 'development' && (
-          <div className="fixed bottom-4 left-4 bg-black/50 text-white p-2 rounded text-xs">
-            <div>Step: {currentStep}</div>
-            <div>Revealing: {isRevealing ? 'Yes' : 'No'}</div>
-            <div>Result: {prizeResult?.label || 'None'}</div>
-            <div>Loading: {loading ? 'Yes' : 'No'}</div>
-          </div>
-        )}
+        {/* Debug Panel - Removed for production */}
+        {/* Debug panel removed */}
       </div>
     </div>
   );

@@ -1,15 +1,15 @@
 // utils/constants.js - FIXED VERSION
-export const API_BASE = import.meta.env.VITE_API_URL;
+export const API_BASE = 'http://localhost:3000/api'; // FIXED: Changed from 5000 to 3000
 
 export const WHEEL_SEGMENTS = [
   {
     id: 1,
-    label: 'FREE GIFT!',
+    label: 'FREE BIB!',
     group: 'group_1',
     color: '#10B981',
     challenges: 0,
     startAngle: 0,
-    endAngle: 90,
+    endAngle: 45, // Smaller segment for BIB
     limit: 5,
   },
   {
@@ -18,8 +18,8 @@ export const WHEEL_SEGMENTS = [
     group: 'group_2',
     color: '#3B82F6',
     challenges: 1,
-    startAngle: 90,
-    endAngle: 180,
+    startAngle: 45,
+    endAngle: 135, // 90 degrees
     limit: 45,
   },
   {
@@ -28,8 +28,8 @@ export const WHEEL_SEGMENTS = [
     group: 'group_3',
     color: '#8B5CF6',
     challenges: 2,
-    startAngle: 180,
-    endAngle: 270,
+    startAngle: 135,
+    endAngle: 270, // Largest segment - 135 degrees
     limit: 55,
   },
   {
@@ -39,7 +39,7 @@ export const WHEEL_SEGMENTS = [
     color: '#EF4444',
     challenges: 3,
     startAngle: 270,
-    endAngle: 360,
+    endAngle: 360, // 90 degrees
     limit: 15,
   },
 ];
