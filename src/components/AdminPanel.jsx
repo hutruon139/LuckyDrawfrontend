@@ -71,10 +71,10 @@ const AdminPanel = ({
               <thead className="bg-white/10">
                 <tr>
                   <th className="px-4 py-3 text-left text-white font-medium">
-                    Gia đình
+                    Họ và tên
                   </th>
                   <th className="px-4 py-3 text-left text-white font-medium">
-                    Điện thoại
+                    ID Nhân viên
                   </th>
                   <th className="px-4 py-3 text-left text-white font-medium">
                     Kết quả
@@ -94,7 +94,9 @@ const AdminPanel = ({
                 {families.map((family) => (
                   <tr key={family._id} className="hover:bg-white/5">
                     <td className="px-4 py-3 text-white">{family.name}</td>
-                    <td className="px-4 py-3 text-white/80">{family.phone}</td>
+                    <td className="px-4 py-3 text-white/80">
+                      {family.employeeId || family.phone}
+                    </td>
                     <td className="px-4 py-3">
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-medium ${
