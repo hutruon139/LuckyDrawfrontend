@@ -49,6 +49,18 @@ const App = () => {
     }
   };
 
+  // NEW: Reset and go directly to check-in page
+  const resetToCheckin = () => {
+    setCheckinData(INITIAL_CHECKIN_DATA);
+    setPrizeResult(null);
+    setMessage('');
+    setIsSpinning(false);
+    if (wheelRef.current) {
+      wheelRef.current.reset();
+    }
+    setCurrentStep('checkin'); // Go directly to check-in instead of welcome
+  };
+
   // Handle check-in and wheel spin
   const handleCheckinAndSpin = async () => {
     try {
@@ -253,8 +265,8 @@ const App = () => {
             <ResultScreen
               spinResult={prizeResult}
               checkinData={checkinData}
-              onNewFamily={resetToWelcome}
-              onGoHome={resetToWelcome}
+              onNewFamily={resetToCheckin} // CHANGED: Use resetToCheckin instead of resetToWelcome
+              onGoHome={resetToWelcome}   // Keep resetToWelcome for "Go Home" button
             />
           )}
 
