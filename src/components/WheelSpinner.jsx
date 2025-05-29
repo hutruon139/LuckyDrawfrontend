@@ -169,7 +169,7 @@ const WheelSpinner = forwardRef(
                 ? "Bánh xe đang xoay để chọn thử thách cho bạn!"
                 : showResult
                 ? "Chúc mừng! Đây là thử thách của bạn!"
-                : "Nhấn XOAY để biết thử thách của bạn!"}
+                : "Nhấn quay để biết thử thách của bạn!"}
             </p>
           </div>
 

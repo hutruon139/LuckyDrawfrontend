@@ -1,6 +1,6 @@
 // components/CheckinForm.jsx
 import React from 'react';
-import { Users, Phone, Mail, User } from 'lucide-react';
+import { Users, IdCard, User } from 'lucide-react';
 
 const CheckinForm = ({ 
   checkinData, 
@@ -23,7 +23,7 @@ const CheckinForm = ({
           <div>
             <label className="block text-white/80 text-sm font-medium mb-2">
               <User className="inline h-4 w-4 mr-1" />
-              Tên gia đình *
+              Họ và tên *
             </label>
             <input
               type="text"
@@ -33,40 +33,24 @@ const CheckinForm = ({
                 setCheckinData({ ...checkinData, name: e.target.value })
               }
               className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:ring-2 focus:ring-blue-500 focus:border-transparent backdrop-blur-md"
-              placeholder="Nhập tên gia đình"
+              placeholder="Nhập họ và tên"
             />
           </div>
 
           <div>
             <label className="block text-white/80 text-sm font-medium mb-2">
-              <Phone className="inline h-4 w-4 mr-1" />
-              Số điện thoại *
+              <IdCard className="inline h-4 w-4 mr-1" />
+              ID nhân viên *
             </label>
             <input
-              type="tel"
+              type="text"
               required
               value={checkinData.phone}
               onChange={(e) =>
                 setCheckinData({ ...checkinData, phone: e.target.value })
               }
               className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:ring-2 focus:ring-blue-500 focus:border-transparent backdrop-blur-md"
-              placeholder="Nhập số điện thoại"
-            />
-          </div>
-
-          <div>
-            <label className="block text-white/80 text-sm font-medium mb-2">
-              <Mail className="inline h-4 w-4 mr-1" />
-              Email (không bắt buộc)
-            </label>
-            <input
-              type="email"
-              value={checkinData.email}
-              onChange={(e) =>
-                setCheckinData({ ...checkinData, email: e.target.value })
-              }
-              className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:ring-2 focus:ring-blue-500 focus:border-transparent backdrop-blur-md"
-              placeholder="Nhập email"
+              placeholder="Nhập ID nhân viên"
             />
           </div>
 
