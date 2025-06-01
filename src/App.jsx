@@ -1,11 +1,11 @@
-// App.jsx - WITH WHEEL SPINNER SYSTEM
+// App.jsx - FIXED WITH PROPER IMPORTS
 import React, { useState, useRef } from 'react';
 import { Trophy, Star } from 'lucide-react';
 
 // Components
-import WelcomeScreen from './components/WelcomeScreen';
+import StandbyScreen from './components/StandbyScreen';
 import CheckinForm from './components/CheckinForm';
-import WheelSpinner from './components/WheelSpinner'; // NEW: Replace CardFlipReveal
+import WheelSpinner from './components/WheelSpinner';
 import ResultScreen from './components/ResultScreen';
 import AdminPanel from './components/AdminPanel';
 import AdminLogin from './components/AdminLogin';
@@ -16,14 +16,14 @@ import { useAPI } from './hooks/useAPI';
 
 // Utils and Services
 import { determineRiggedResult } from './utils/wheelCalculations';
-import { INITIAL_CHECKIN_DATA, ADMIN_PASSWORD } from './utils/constants';
+import { INITIAL_CHECKIN_DATA, ADMIN_PASSWORD } from './utils/constants'; // IMPORT THESE
 import apiService from './services/api';
 
 const App = () => {
   // State management
-  const [currentStep, setCurrentStep] = useState('welcome');
+  const [currentStep, setCurrentStep] = useState('standby'); // START WITH STANDBY
   const [checkinData, setCheckinData] = useState(INITIAL_CHECKIN_DATA);
-  const [isSpinning, setIsSpinning] = useState(false); // Changed from isRevealing
+  const [isSpinning, setIsSpinning] = useState(false);
   const [prizeResult, setPrizeResult] = useState(null);
   const [message, setMessage] = useState('');
   const [families, setFamilies] = useState([]);
@@ -35,11 +35,11 @@ const App = () => {
   const { loading, executeRequest } = useAPI();
 
   // Refs
-  const wheelRef = useRef(null); // Changed from cardRef
+  const wheelRef = useRef(null);
 
-  // Reset wheel and go to welcome
-  const resetToWelcome = () => {
-    setCurrentStep('welcome');
+  // MAIN RESET - Always go back to standby
+  const resetToStandby = () => {
+    setCurrentStep('standby');
     setCheckinData(INITIAL_CHECKIN_DATA);
     setPrizeResult(null);
     setMessage('');
@@ -49,19 +49,7 @@ const App = () => {
     }
   };
 
-  // NEW: Reset and go directly to check-in page
-  const resetToCheckin = () => {
-    setCheckinData(INITIAL_CHECKIN_DATA);
-    setPrizeResult(null);
-    setMessage('');
-    setIsSpinning(false);
-    if (wheelRef.current) {
-      wheelRef.current.reset();
-    }
-    setCurrentStep('checkin'); // Go directly to check-in instead of welcome
-  };
-
-  // Handle check-in and wheel spin
+  // Handle check-in and move to wheel
   const handleCheckinAndSpin = async () => {
     try {
       setMessage('');
@@ -81,14 +69,14 @@ const App = () => {
       const riggedResult = determineRiggedResult(prizeStats);
       console.log('🎰 Rigged result determined:', riggedResult);
 
-      // Set up the wheel spin
+      // Set up the result
       setPrizeResult({
         ...riggedResult,
         familyData: checkinResult.data,
       });
 
-      // Start wheel spin
-      setCurrentStep('spin'); // Changed from 'reveal'
+      // Go directly to wheel spin
+      setCurrentStep('spin');
       setIsSpinning(true);
 
       // Start the wheel animation
@@ -128,16 +116,14 @@ const App = () => {
   const handleSpinComplete = (segmentResult) => {
     console.log('🎡 Wheel spin animation completed:', segmentResult);
     setIsSpinning(false);
-    // Delay before showing result screen
+    // Show result briefly, then go back to standby
     setTimeout(() => {
       setCurrentStep('result');
     }, 2000);
   };
 
-  // Handle wheel spin start (triggered by wheel button)
+  // Handle wheel spin start
   const handleSpinStart = () => {
-    // This is called when user clicks the wheel
-    // The actual logic is in handleCheckinAndSpin
     console.log('🎡 Wheel spin started by user');
   };
 
@@ -190,108 +176,125 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden">
-      {/* Animated background */}
-      <div className="absolute inset-0">
-        {[...Array(30)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute animate-pulse"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 3}s`,
-              animationDuration: `${2 + Math.random() * 2}s`,
-            }}
-          >
-            <Star className="h-2 w-2 text-yellow-300 opacity-40" />
+    <div className="min-h-screen">
+      {/* MAIN CONTENT */}
+      <div className={`min-h-screen ${currentStep !== 'standby' ? 'bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900' : ''} relative overflow-hidden`}>
+        
+        {/* Animated background - only show on non-standby screens */}
+        {currentStep !== 'standby' && (
+          <div className="absolute inset-0">
+            {[...Array(30)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute animate-pulse"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  animationDelay: `${Math.random() * 3}s`,
+                  animationDuration: `${2 + Math.random() * 2}s`,
+                }}
+              >
+                <Star className="h-2 w-2 text-yellow-300 opacity-40" />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        )}
 
-      <div className="relative z-10 min-h-screen">
-        {/* Header */}
-        <header className="text-center py-6 px-4">
-          <div className="flex items-center justify-center space-x-3 mb-2">
-            <Trophy className="h-10 w-10 text-yellow-400" />
-            <h1 className="text-4xl md:text-5xl font-bold text-white">
-              Lucky Draw Challenge
-            </h1>
-            <Trophy className="h-10 w-10 text-yellow-400" />
-          </div>
-          <p className="text-lg text-blue-200">
-            Check-in và quay vòng may mắn để nhận thử thách!
-          </p>
+        <div className="relative z-10 min-h-screen">
+          {/* Header - hide on standby screen */}
+          {currentStep !== 'standby' && currentStep !== 'checkin' &&(
+            <header className="text-center py-6 px-4">
+              <div className="flex items-center justify-center space-x-3 mb-2">
+                <Trophy className="h-10 w-10 text-yellow-400" />
+                <h1 className="text-4xl md:text-5xl font-bold text-white">
+                  Lucky Draw Challenge
+                </h1>
+                <Trophy className="h-10 w-10 text-yellow-400" />
+              </div>
+              <p className="text-lg text-blue-200">
+                Check-in và quay vòng may mắn để nhận thử thách!
+              </p>
 
-          {/* Admin button */}
-          <button
-            onClick={() => setShowAdminLogin(true)}
-            className="absolute top-4 right-4 text-white/50 hover:text-white text-sm"
-          >
-            Admin
-          </button>
-        </header>
-
-        {/* Main Content */}
-        <main>
-          {currentStep === 'welcome' && (
-            <WelcomeScreen
-              onStartClick={() => setCurrentStep('checkin')}
-            />
+              {/* Admin button */}
+              <button
+                onClick={() => setShowAdminLogin(true)}
+                className="absolute top-4 right-4 text-white/50 hover:text-white text-sm"
+              >
+                Admin
+              </button>
+            </header>
           )}
 
-          {currentStep === 'checkin' && (
-            <CheckinForm
-              checkinData={checkinData}
-              setCheckinData={setCheckinData}
-              onSubmit={handleCheckinAndSpin} // Changed from handleCheckinAndReveal
-              onBack={() => setCurrentStep('welcome')}
-              loading={loading}
-              message={message}
-            />
+          {/* Main Content */}
+          <main>
+            {/* STANDBY SCREEN - MAIN HUB */}
+            {currentStep === 'standby' && (
+              <StandbyScreen
+                onTouchToSpin={() => setCurrentStep('checkin')}
+                familyName={null} // No name on initial standby
+              />
+            )}
+
+            {currentStep === 'checkin' && (
+              <CheckinForm
+                checkinData={checkinData}
+                setCheckinData={setCheckinData}
+                onSubmit={handleCheckinAndSpin}
+                onBack={resetToStandby}
+                loading={loading}
+                message={message}
+              />
+            )}
+
+            {currentStep === 'spin' && (
+              <WheelSpinner
+                ref={wheelRef}
+                isSpinning={isSpinning}
+                prizeResult={prizeResult}
+                onSpinComplete={handleSpinComplete}
+                onSpinStart={handleSpinStart}
+              />
+            )}
+
+            {currentStep === 'result' && prizeResult && (
+              <ResultScreen
+                spinResult={prizeResult}
+                checkinData={checkinData}
+                onNewFamily={resetToStandby}
+                onGoHome={resetToStandby}
+              />
+            )}
+
+            {currentStep === 'admin' && (
+              <AdminPanel
+                prizeStats={prizeStats}
+                families={families}
+                onGoHome={resetToStandby}
+                onResetFamily={resetFamily}
+                onDeleteFamily={deleteFamily}
+              />
+            )}
+          </main>
+
+          {/* Admin Login Modal */}
+          <AdminLogin
+            showAdminLogin={showAdminLogin}
+            adminPassword={adminPassword}
+            setAdminPassword={setAdminPassword}
+            onLogin={handleAdminLogin}
+            onCancel={handleAdminCancel}
+          />
+
+          {/* Admin button overlay for standby screen */}
+          {currentStep === 'standby' && (
+            <button
+              onClick={() => setShowAdminLogin(true)}
+              className="absolute top-4 right-4 text-gray-600 hover:text-gray-800 text-sm bg-white/50 px-3 py-1 rounded z-30"
+            >
+              Admin
+            </button>
           )}
-
-          {currentStep === 'spin' && ( // Changed from 'reveal'
-            <WheelSpinner
-              ref={wheelRef}
-              isSpinning={isSpinning}
-              prizeResult={prizeResult}
-              onSpinComplete={handleSpinComplete}
-              onSpinStart={handleSpinStart}
-            />
-          )}
-
-          {currentStep === 'result' && prizeResult && (
-            <ResultScreen
-              spinResult={prizeResult}
-              checkinData={checkinData}
-              onNewFamily={resetToCheckin} // CHANGED: Use resetToCheckin instead of resetToWelcome
-              onGoHome={resetToWelcome}   // Keep resetToWelcome for "Go Home" button
-            />
-          )}
-
-          {currentStep === 'admin' && (
-            <AdminPanel
-              prizeStats={prizeStats}
-              families={families}
-              onGoHome={resetToWelcome}
-              onResetFamily={resetFamily}
-              onDeleteFamily={deleteFamily}
-            />
-          )}
-        </main>
-
-        {/* Admin Login Modal */}
-        <AdminLogin
-          showAdminLogin={showAdminLogin}
-          adminPassword={adminPassword}
-          setAdminPassword={setAdminPassword}
-          onLogin={handleAdminLogin}
-          onCancel={handleAdminCancel}
-        />
-
-        {/* Debug Panel - Removed for production */}
-        {/* Debug panel removed */}
+        </div>
       </div>
     </div>
   );

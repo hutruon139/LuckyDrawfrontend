@@ -1,20 +1,20 @@
-// utils/constants.js - FIXED VERSION
+// utils/constants.js - UPDATED WITH VIETNAMESE TEXT
 export const API_BASE = import.meta.env.VITE_API_URL;
 
 export const WHEEL_SEGMENTS = [
   {
     id: 1,
-    label: 'FREE BIB!',
+    label: 'CHÚC MỪNG BẠN ĐÃ NHẬN ĐƯỢC PHẦN THƯỞNG', // Vietnamese text from your design
     group: 'group_1',
     color: '#10B981',
     challenges: 0,
     startAngle: 0,
-    endAngle: 45, // Smaller segment for BIB
+    endAngle: 45, // Smaller segment for gift
     limit: 5,
   },
   {
     id: 2,
-    label: '1 Challenge',
+    label: 'THAM GIA 1 THỬ THÁCH', // Vietnamese text from your design
     group: 'group_2',
     color: '#3B82F6',
     challenges: 1,
@@ -24,7 +24,7 @@ export const WHEEL_SEGMENTS = [
   },
   {
     id: 3,
-    label: '2 Challenges',
+    label: 'THAM GIA 2 THỬ THÁCH', // Vietnamese text from your design
     group: 'group_3',
     color: '#8B5CF6',
     challenges: 2,
@@ -34,7 +34,7 @@ export const WHEEL_SEGMENTS = [
   },
   {
     id: 4,
-    label: '3 Challenges',
+    label: 'THAM GIA 3 THỬ THÁCH', // Vietnamese text from your design
     group: 'group_4',
     color: '#EF4444',
     challenges: 3,
@@ -54,7 +54,22 @@ export const INITIAL_PRIZE_STATS = {
 export const INITIAL_CHECKIN_DATA = {
   name: '',
   phone: '',
-  email: '',
+  email: '', // Keep email field for future use
 };
 
 export const ADMIN_PASSWORD = 'admin123';
+
+// Additional constants for the wheel display
+export const WHEEL_COLORS = {
+  group_1: '#10B981', // Green for free gift
+  group_2: '#3B82F6', // Blue for 1 challenge
+  group_3: '#8B5CF6', // Purple for 2 challenges
+  group_4: '#EF4444', // Red for 3 challenges
+};
+
+export const CHALLENGE_EMOJIS = {
+  0: '🎁', // Free gift
+  1: '🎯', // 1 challenge
+  2: '🏆', // 2 challenges
+  3: '👑', // 3 challenges
+};
