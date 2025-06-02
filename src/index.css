@@ -101,4 +101,22 @@ html, body {
     max-width: 50rem !important; /* Bigger container than max-w-md */
     padding: 3rem !important; /* Bigger padding */
   }
+  .tv-keyboard {
+    font-size: 1.5rem !important;
+  }
+  
+  .tv-keyboard .hg-button {
+    height: 80px !important;
+    font-size: 1.8rem !important;
+    margin: 4px !important;
+  }
+  
+  .tv-keyboard-title {
+    font-size: 2rem !important;
+  }
+  
+  .tv-keyboard-close {
+    font-size: 1.5rem !important;
+    padding: 1rem 2rem !important;
+  }
 }
