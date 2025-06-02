@@ -10,26 +10,26 @@ const CheckinForm = ({
 }) => {
   return (
     <div 
-      className="min-h-screen w-full bg-cover bg-center bg-no-repeat flex items-start justify-center"
+      className="min-h-screen w-full bg-cover bg-center bg-no-repeat flex items-start justify-center px-12 py-24"
       style={{
         backgroundImage: `url('/assets/background.jpg')`,
       }}
     >
-      {/* Main Form Container - Kéo xuống bằng cách tăng mt */}
-      <div className="w-full max-w-4xl mx-auto mt-40">
-        <div className="bg-white rounded-4xl p-12 shadow-lg min-h-96">
-          {/* Form Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-6xl font-bold text-black p-20">
+      {/* Main Form Container - Optimized for 9:16 vertical ratio */}
+      <div className="w-full max-w-md mx-auto">
+        <div className="bg-white rounded-4xl p-9 shadow-lg">
+          {/* Form Header - Reduced padding */}
+          <div className="text-center mb-4">
+            <h1 className="font-bold text-black p-3" style={{ fontSize: '26px' }}>
               Vui lòng nhập thông tin
             </h1>
           </div>
 
-          {/* Form Fields */}
-          <div className="space-y-8">
+          {/* Form Fields - Compact spacing */}
+          <div className="space-y-5">
             {/* Name Field */}
             <div>
-              <label className="block text-gray-400 text-4xl mb-3">
+              <label className="block text-gray-400 text-base mb-1">
                 Họ và tên
               </label>
               <input
@@ -39,14 +39,14 @@ const CheckinForm = ({
                 onChange={(e) =>
                   setCheckinData({ ...checkinData, name: e.target.value })
                 }
-                className="w-full px-4 py-10 bg-gray-100 border-0 rounded-lg text-gray-800 focus:outline-none transition-all text-4xl"
+                className="w-full px-3 py-3 bg-gray-100 border-0 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all text-sm"
                 placeholder=""
               />
             </div>
 
             {/* Employee ID Field */}
             <div>
-              <label className="block text-gray-400 text-4xl mb-3">
+              <label className="block text-gray-400 text-base mb-1">
                 ID nhân viên
               </label>
               <input
@@ -56,7 +56,7 @@ const CheckinForm = ({
                 onChange={(e) =>
                   setCheckinData({ ...checkinData, phone: e.target.value })
                 }
-                className="w-full px-4 py-10 bg-gray-100 border-0 rounded-lg text-gray-800 focus:outline-none transition-all text-4xl"
+                className="w-full px-3 py-3 bg-gray-100 border-0 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all text-sm"
                 placeholder=""
               />
             </div>
@@ -65,7 +65,7 @@ const CheckinForm = ({
             <button
               onClick={onSubmit}
               disabled={loading || !checkinData.name || !checkinData.phone}
-              className="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-10 rounded-full transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed mt-8 text-5xl"
+              className="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-3 rounded-full transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed mt-4 text-base"
             >
               {loading ? (
                 <span className="flex items-center justify-center">
@@ -80,7 +80,7 @@ const CheckinForm = ({
 
           {/* Error/Success Message */}
           {message && (
-            <div className={`mt-6 p-4 rounded-lg text-center text-lg ${
+            <div className={`mt-3 p-2 rounded-lg text-center text-xs ${
               message.includes('thành công') 
                 ? 'bg-green-100 text-green-700' 
                 : 'bg-red-100 text-red-700'
@@ -92,7 +92,7 @@ const CheckinForm = ({
           {/* Back Button */}
           <button
             onClick={onBack}
-            className="w-full mt-6 text-gray-500 hover:text-gray-700 transition text-4xl py-2"
+            className="w-full mt-3 text-gray-500 hover:text-gray-700 transition text-sm py-1"
           >
             ← Quay lại
           </button>

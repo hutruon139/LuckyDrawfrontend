@@ -1,1 +1,28 @@
 @import "tailwindcss";
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  background: black; /* Black bars */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+#aspect-container {
+  width: calc(100vh * 9 / 16); /* Enforce 9:16 */
+  height: 100vh;
+  background: white; /* Or any color */
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+}
+
