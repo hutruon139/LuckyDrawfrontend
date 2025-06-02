@@ -26,3 +26,79 @@ html, body {
   width: 100%;
 }
 
+@media (min-width: 1080px) {
+  .tv-padding {
+    padding: 3.5rem !important;
+  }
+  
+  .tv-header-text {
+    font-size: 3.5rem !important;
+    margin: 2.5rem;
+  }
+  
+  .tv-container-padding {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    padding-top: 12rem !important;
+  }
+  
+  .tv-form-width {
+    max-width: 85% !important; /* Takes up 80% of available width */
+  }
+
+  .tv-form-spacing {
+    gap: 3rem !important; /* Bigger spacing between fields */
+  }
+  
+  .tv-label-text {
+    font-size: 2.5rem !important; /* 24px */
+    margin-bottom: 1rem !important;
+  }
+  
+  .tv-input-text {
+    font-size: 2rem !important; /* 20px */
+  }
+  
+  .tv-input-padding {
+    padding: 1.5rem !important; /* Bigger input padding */
+  }
+  .tv-button-text {
+    font-size: 2.5rem !important; /* 24px */
+  }
+  
+  .tv-button-padding {
+    padding: 1.25rem !important; /* Bigger button padding */
+    margin-top: 3rem !important;
+  }
+  
+  .tv-spinner-size {
+    width: 1.5rem !important; /* 24px */
+    height: 1.5rem !important;
+  }
+  
+  .tv-message-text {
+    font-size: 2rem !important; /* 16px */
+  }
+  
+  .tv-message-padding {
+    padding: 1rem !important;
+    margin-top: 1.5rem !important;
+  }
+  
+  .tv-back-button-text {
+    font-size: 2rem !important; /* 20px */
+  }
+  
+  .tv-back-button-padding {
+    padding: 0.75rem !important;
+    margin-top: 1.5rem !important;
+  }
+  .tv-standby-text {
+    font-size: 2rem !important; /* Much bigger than text-4xl (2.25rem) */
+  }
+  
+  .tv-standby-container {
+    max-width: 50rem !important; /* Bigger container than max-w-md */
+    padding: 3rem !important; /* Bigger padding */
+  }
+}
