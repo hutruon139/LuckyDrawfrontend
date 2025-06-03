@@ -116,22 +116,28 @@ const WheelSpinner = forwardRef(
 
     const calculateTargetAngle = (targetSegment) => {
       // Get the center of the target segment
-      const segmentCenter =
-        (targetSegment.startAngle + targetSegment.endAngle) / 2;
+      let segmentCenter;
+
+      if (targetSegment.startAngle > targetSegment.endAngle) {
+        // Crosses the 360° mark
+        segmentCenter =
+          (targetSegment.startAngle + (targetSegment.endAngle + 360)) / 2;
+        if (segmentCenter >= 360) segmentCenter -= 360;
+      } else {
+        segmentCenter =
+          (targetSegment.startAngle + targetSegment.endAngle) / 2;
+      }
 
       // More dynamic spins based on segment
       const minSpins = 12;
       const maxSpins = 18;
-      const spins =
-        minSpins + Math.floor(Math.random() * (maxSpins - minSpins + 1));
+      const spins = minSpins + Math.floor(Math.random() * (maxSpins - minSpins + 1));
       const baseRotation = spins * 360;
-
-      // Add some randomness within the segment for more natural landing
+    
       const segmentRange = targetSegment.endAngle - targetSegment.startAngle;
-      const randomOffset = (Math.random() - 0.5) * segmentRange * 0.6; // Use 60% of segment range
+      const randomOffset = (Math.random() - 0.5) * segmentRange * 0.6;
       const targetPosition = segmentCenter + randomOffset;
-
-      // Calculate final angle to land on target position
+    
       const targetAngle = baseRotation + (360 - targetPosition);
 
       console.log("🎯 Target Segment:", targetSegment.label);

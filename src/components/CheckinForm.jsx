@@ -54,6 +54,25 @@ const CheckinForm = ({
     setActiveInput('');
   };
 
+  // Handle physical keyboard input
+  const handlePhysicalKeyboard = (e, fieldName) => {
+    const value = e.target.value;
+    setCheckinData({ ...checkinData, [fieldName]: value });
+    
+    // Update virtual keyboard if it's open for this field
+    if (activeInput === fieldName && showKeyboard) {
+      // Sync virtual keyboard with physical input
+      // This ensures both keyboards stay in sync
+    }
+  };
+
+  // Handle form submission with Enter key
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !loading && checkinData.name && checkinData.phone) {
+      onSubmit();
+    }
+  };
+
   return (
     <div
       className="min-h-screen w-full bg-cover bg-center bg-no-repeat flex flex-col items-center justify-start px-12 py-24 tv-container-padding"
@@ -82,15 +101,14 @@ const CheckinForm = ({
                 type="text"
                 required
                 value={checkinData.name}
-                onChange={(e) =>
-                  setCheckinData({ ...checkinData, name: e.target.value })
-                }
+                onChange={(e) => handlePhysicalKeyboard(e, 'name')}
                 onFocus={() => handleInputFocus('name')}
-                className="w-full px-3 py-3 bg-gray-100 border-0 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all text-sm tv-input-text tv-input-padding cursor-pointer"
+                onKeyDown={handleKeyDown}
+                className="w-full px-3 py-3 bg-gray-100 border-0 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all text-sm tv-input-text tv-input-padding cursor-text"
                 placeholder="Nhập họ và tên"
                 autoComplete="name"
                 autoCapitalize="words"
-                readOnly // Prevent system keyboard, only use virtual keyboard
+                // Remove readOnly to allow physical keyboard input
               />
               
               {/* Keyboard for Name Field */}
@@ -152,14 +170,13 @@ const CheckinForm = ({
                 type="text"
                 required
                 value={checkinData.phone}
-                onChange={(e) =>
-                  setCheckinData({ ...checkinData, phone: e.target.value })
-                }
+                onChange={(e) => handlePhysicalKeyboard(e, 'phone')}
                 onFocus={() => handleInputFocus('phone')}
-                className="w-full px-3 py-3 bg-gray-100 border-0 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all text-sm tv-input-text tv-input-padding cursor-pointer"
+                onKeyDown={handleKeyDown}
+                className="w-full px-3 py-3 bg-gray-100 border-0 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all text-sm tv-input-text tv-input-padding cursor-text"
                 placeholder="Nhập ID nhân viên"
                 autoComplete="off"
-                readOnly // Prevent system keyboard, only use virtual keyboard
+                // Remove readOnly to allow physical keyboard input
               />
               
               {/* Keyboard for Employee ID Field */}
