@@ -1,6 +1,5 @@
-// App.jsx - OPTIMIZED FOR VERTICAL TV (9:16 ASPECT RATIO)
+// App.jsx - CLEANED VERSION - Removed redundant elements
 import React, { useState, useRef } from "react";
-import { Trophy, Star } from "lucide-react";
 
 // Components
 import StandbyScreen from "./components/StandbyScreen";
@@ -15,7 +14,6 @@ import { usePrizeStats } from "./hooks/usePrizeStats";
 import { useAPI } from "./hooks/useAPI";
 
 // Utils and Services
-import { determineRiggedResult } from "./utils/wheelCalculations";
 import { INITIAL_CHECKIN_DATA, ADMIN_PASSWORD } from "./utils/constants";
 import apiService from "./services/api";
 
@@ -39,7 +37,7 @@ const App = () => {
 
   // MAIN RESET - Always go back to standby
   const resetToStandby = () => {
-    console.log("🏠 Going back to standby..."); // Add this line
+    console.log("🏠 Going back to standby...");
     setCurrentStep("standby");
     setCheckinData(INITIAL_CHECKIN_DATA);
     setPrizeResult(null);
@@ -185,33 +183,7 @@ const App = () => {
       <div className="h-screen max-w-[calc(100vh*9/16)] w-full bg-white overflow-hidden shadow-xl">
         <div className="vertical-tv-container">
           {/* MAIN CONTENT - VERTICAL TV LAYOUT */}
-          <div
-            className={`min-h-screen w-full ${
-              currentStep !== "standby"
-                ? "bg-gradient-to-b from-purple-900 via-blue-900 to-indigo-900"
-                : ""
-            } relative overflow-hidden`}
-          >
-            {/* Animated background - only show on non-standby screens */}
-            {currentStep !== "standby" && (
-              <div className="absolute inset-0">
-                {[...Array(20)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="absolute animate-pulse"
-                    style={{
-                      left: `${Math.random() * 100}%`,
-                      top: `${Math.random() * 100}%`,
-                      animationDelay: `${Math.random() * 3}s`,
-                      animationDuration: `${2 + Math.random() * 2}s`,
-                    }}
-                  >
-                    <Star className="h-3 w-3 text-yellow-300 opacity-40" />
-                  </div>
-                ))}
-              </div>
-            )}
-
+          <div className="min-h-screen w-full relative overflow-hidden">
             <div className="relative z-10 h-full">
               {/* Header - COMPACT for vertical layout */}
               {currentStep !== "standby" && currentStep !== "checkin" && (
@@ -278,7 +250,9 @@ const App = () => {
 
                 {/* ADMIN PANEL - SCROLLABLE VERTICAL */}
                 {currentStep === "admin" && (
-                  <div className="admin-vertical">
+                  <div 
+                    className="admin-vertical min-h-screen bg-gradient-to-b from-purple-900 via-blue-900 to-indigo-900 py-8"
+                  >
                     <AdminPanel
                       prizeStats={prizeStats}
                       families={families}
