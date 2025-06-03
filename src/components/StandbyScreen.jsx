@@ -1,4 +1,4 @@
-// components/StandbyScreen.jsx - FIXED IMAGE LOADING
+// components/StandbyScreen.jsx - PRODUCTION READY - No console logs
 import React, { useState, useEffect } from "react";
 
 const StandbyScreen = ({ onTouchToSpin, familyName }) => {
@@ -21,7 +21,6 @@ const StandbyScreen = ({ onTouchToSpin, familyName }) => {
 
     const tryLoadImage = () => {
       if (imageIndex >= imagePaths.length) {
-        console.error("❌ Could not load standby image from any path");
         setImageError(true);
         setImageLoaded(true); // Show fallback
         return;
@@ -31,13 +30,11 @@ const StandbyScreen = ({ onTouchToSpin, familyName }) => {
       const currentPath = imagePaths[imageIndex];
 
       img.onload = () => {
-        console.log("✅ Image loaded successfully from:", currentPath);
         setImageLoaded(true);
         setImageError(false);
       };
 
       img.onerror = () => {
-        console.log("❌ Failed to load image from:", currentPath);
         imageIndex++;
         tryLoadImage();
       };

@@ -108,7 +108,6 @@ const WheelSpinner = forwardRef(
           wheelElement.style.transition = "none";
           wheelElement.style.transform = "rotate(0deg)";
           void wheelElement.offsetWidth;
-          
         }
         setFinalAngle(0);
         setShowResult(false);
@@ -143,22 +142,14 @@ const WheelSpinner = forwardRef(
 
       const targetAngle = baseRotation + (360 - targetPosition);
 
-      console.log("🎯 Target Segment:", targetSegment.label);
-      console.log("📐 Segment Center:", segmentCenter + "°");
-      console.log("🎲 Random Offset:", randomOffset + "°");
-      console.log("🎪 Final Target Angle:", targetAngle + "°");
-      console.log("🌀 Total Spins:", spins);
-
       return targetAngle;
     };
 
     const startSpin = (targetResult) => {
-      console.log("🎪 Starting spin with predetermined result:", targetResult);
       setShowResult(false);
       setIsInternalSpinning(true);
 
       if (!targetResult) {
-        console.warn("⚠️ No target result provided, using random fallback");
         const randomSegment =
           segments[Math.floor(Math.random() * segments.length)];
         targetResult = {
@@ -174,14 +165,6 @@ const WheelSpinner = forwardRef(
       );
 
       if (matchingSegments.length === 0) {
-        console.error(
-          "❌ No matching segments found for group:",
-          targetResult.group
-        );
-        console.log(
-          "Available groups:",
-          segments.map((s) => s.group)
-        );
         setIsInternalSpinning(false);
         return;
       }
@@ -189,10 +172,6 @@ const WheelSpinner = forwardRef(
       // Randomly pick one of the matching segments
       const targetSegment =
         matchingSegments[Math.floor(Math.random() * matchingSegments.length)];
-
-      console.log(
-        `✅ Found ${matchingSegments.length} segments for ${targetResult.group}, selected segment ${targetSegment.id}`
-      );
 
       const targetAngle = calculateTargetAngle(targetSegment);
       setFinalAngle(targetAngle);

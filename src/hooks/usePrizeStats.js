@@ -1,4 +1,4 @@
-// hooks/usePrizeStats.js
+// hooks/usePrizeStats.js - PRODUCTION READY - No console logs
 import { useState, useEffect } from 'react';
 import apiService from '../services/api';
 import { INITIAL_PRIZE_STATS } from '../utils/constants';
@@ -20,7 +20,6 @@ export const usePrizeStats = () => {
         group4: { current: data.groups.group4 || 0, limit: 15 },
       });
     } catch (err) {
-      console.error('Error fetching prize stats:', err);
       setError(err.message);
     } finally {
       setLoading(false);

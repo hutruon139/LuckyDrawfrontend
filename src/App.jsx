@@ -1,4 +1,4 @@
-// App.jsx - CLEANED VERSION - Removed redundant elements
+// App.jsx - PRODUCTION READY - All console logs removed for better performance
 import React, { useState, useRef } from "react";
 
 // Components
@@ -37,7 +37,6 @@ const App = () => {
 
   // MAIN RESET - Always go back to standby
   const resetToStandby = () => {
-    console.log("🏠 Going back to standby...");
     setCurrentStep("standby");
     setCheckinData(INITIAL_CHECKIN_DATA);
     setPrizeResult(null);
@@ -52,21 +51,16 @@ const App = () => {
   const handleCheckinAndSpin = async () => {
     try {
       setMessage("");
-      console.log("🎯 Starting check-in and spin process...");
 
       // Check in the family
-      console.log("📝 Checking in family:", checkinData);
       const checkinResult = await executeRequest(() =>
         apiService.checkinFamily(checkinData)
       );
-      console.log("✅ Check-in successful:", checkinResult);
 
       // Get rigged result from backend (atomic assignment)
-      console.log("🎰 Requesting spin assignment from backend...");
       const spinAssignment = await executeRequest(() =>
         apiService.assignSpinResult(checkinResult.data._id)
       );
-      console.log("✅ Backend assigned:", spinAssignment);
 
       // Convert backend response to frontend format
       const getColorForGroup = (group) => {
@@ -106,9 +100,7 @@ const App = () => {
 
       // Update stats after successful spin
       await refetchPrizeStats();
-      console.log("🎉 Spin process completed successfully!");
     } catch (error) {
-      console.error("❌ Spin process failed:", error);
       setMessage(`❌ ${error.message}`);
       setIsSpinning(false);
     }
@@ -116,7 +108,6 @@ const App = () => {
 
   // Handle when wheel spin is complete
   const handleSpinComplete = (segmentResult) => {
-    console.log("🎡 Wheel spin animation completed:", segmentResult);
     setIsSpinning(false);
     // Show result briefly, then go back to standby
     setTimeout(() => {
@@ -126,7 +117,7 @@ const App = () => {
 
   // Handle wheel spin start
   const handleSpinStart = () => {
-    console.log("🎡 Wheel spin started by user");
+    // Wheel spin started
   };
 
   // Admin functions
@@ -135,7 +126,7 @@ const App = () => {
       const data = await executeRequest(() => apiService.getFamilies());
       setFamilies(data);
     } catch (error) {
-      console.error("Error fetching families:", error);
+      // Error handled by useAPI hook
     }
   };
 
