@@ -75,14 +75,14 @@ const CheckinForm = ({
 
   return (
     <div
-      className="min-h-screen w-full bg-cover bg-center bg-no-repeat flex flex-col items-center justify-start px-12 py-24 tv-container-padding"
+      className="min-h-screen w-full bg-cover bg-center bg-no-repeat flex flex-col px-12 py-24 tv-container-padding relative"
       style={{
         backgroundImage: `url('/assets/background.jpg')`,
       }}
     >
-      {/* Main Form Container - Optimized for 9:16 vertical ratio */}
+      {/* Main Form Container - Fixed position when keyboard is open */}
       <div className="w-full max-w-md mx-auto tv-form-width mb-4">
-        <div className="bg-white rounded-4xl p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 2xl:p-16 3xl:p-24 tv-padding shadow-lg">
+  <div className="bg-white rounded-4xl p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 2xl:p-16 3xl:p-24 tv-padding shadow-lg w-full">
           {/* Form Header - Reduced padding */}
           <div className="text-center mb-4">
             <h1 className="font-bold text-black p-3 text-2xl tv-header-text">
@@ -108,57 +108,7 @@ const CheckinForm = ({
                 placeholder="Nhập họ và tên"
                 autoComplete="name"
                 autoCapitalize="words"
-                // Remove readOnly to allow physical keyboard input
               />
-              
-              {/* Keyboard for Name Field */}
-              {showKeyboard && activeInput === 'name' && (
-                <div className="mt-4 w-full">
-                  <div className="bg-white rounded-2xl border-4 border-blue-500 p-4 shadow-2xl">
-                    <div className="flex justify-between items-center mb-3">
-                      <h3 className="text-lg font-semibold text-gray-800 tv-keyboard-title">
-                        Nhập họ và tên
-                      </h3>
-                      <button
-                        onClick={closeKeyboard}
-                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium tv-keyboard-close"
-                      >
-                        Đóng
-                      </button>
-                    </div>
-                    
-                    <Keyboard
-                      onChange={onChangeInput}
-                      onKeyPress={onKeyPress}
-                      layoutName={layoutName}
-                      theme="hg-theme-default tv-keyboard"
-                      inputName={activeInput}
-                      layout={{
-                        default: [
-                          "1 2 3 4 5 6 7 8 9 0 {bksp}",
-                          "q w e r t y u i o p",
-                          "a s d f g h j k l",
-                          "{caps} z x c v b n m",
-                          "{space} {enter}"
-                        ],
-                        shift: [
-                          "1 2 3 4 5 6 7 8 9 0 {bksp}",
-                          "Q W E R T Y U I O P",
-                          "A S D F G H J K L",
-                          "{caps} Z X C V B N M",
-                          "{space} {enter}"
-                        ]
-                      }}
-                      display={{
-                        '{bksp}': 'Xóa ⌫',
-                        '{enter}': 'Xong ✓',
-                        '{caps}': layoutName === 'default' ? 'CAPS' : 'caps',
-                        '{space}': 'Khoảng trắng'
-                      }}
-                    />
-                  </div>
-                </div>
-              )}
             </div>
 
             {/* Employee ID Field */}
@@ -176,57 +126,7 @@ const CheckinForm = ({
                 className="w-full px-3 py-3 bg-gray-100 border-0 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all text-sm tv-input-text tv-input-padding cursor-text"
                 placeholder="Nhập ID nhân viên"
                 autoComplete="off"
-                // Remove readOnly to allow physical keyboard input
               />
-              
-              {/* Keyboard for Employee ID Field */}
-              {showKeyboard && activeInput === 'phone' && (
-                <div className="mt-4 w-full">
-                  <div className="bg-white rounded-2xl border-4 border-green-500 p-4 shadow-2xl">
-                    <div className="flex justify-between items-center mb-3">
-                      <h3 className="text-lg font-semibold text-gray-800 tv-keyboard-title">
-                        Nhập ID nhân viên
-                      </h3>
-                      <button
-                        onClick={closeKeyboard}
-                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium tv-keyboard-close"
-                      >
-                        Đóng
-                      </button>
-                    </div>
-                    
-                    <Keyboard
-                      onChange={onChangeInput}
-                      onKeyPress={onKeyPress}
-                      layoutName={layoutName}
-                      theme="hg-theme-default tv-keyboard"
-                      inputName={activeInput}
-                      layout={{
-                        default: [
-                          "1 2 3 4 5 6 7 8 9 0 {bksp}",
-                          "q w e r t y u i o p",
-                          "a s d f g h j k l",
-                          "{caps} z x c v b n m",
-                          "{space} {enter}"
-                        ],
-                        shift: [
-                          "1 2 3 4 5 6 7 8 9 0 {bksp}",
-                          "Q W E R T Y U I O P",
-                          "A S D F G H J K L",
-                          "{caps} Z X C V B N M",
-                          "{space} {enter}"
-                        ]
-                      }}
-                      display={{
-                        '{bksp}': 'Xóa ⌫',
-                        '{enter}': 'Xong ✓',
-                        '{caps}': layoutName === 'default' ? 'CAPS' : 'caps',
-                        '{space}': 'Khoảng trắng'
-                      }}
-                    />
-                  </div>
-                </div>
-              )}
             </div>
 
             {/* Submit Button */}
@@ -268,6 +168,65 @@ const CheckinForm = ({
           </button>
         </div>
       </div>
+
+      {/* Bottom Keyboard - Fixed at bottom of screen */}
+      {showKeyboard && (
+        <div className="fixed bottom-0 left-0 right-0 z-40 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white border-t-4 border-blue-500 p-4 shadow-2xl">
+            <div className="flex justify-between items-center mb-3 max-w-4xl mx-auto">
+              <h3 className="text-lg font-semibold text-gray-800 tv-keyboard-title">
+                {activeInput === 'name' ? 'Nhập họ và tên' : 'Nhập ID nhân viên'}
+              </h3>
+              <button
+                onClick={closeKeyboard}
+                className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg font-medium tv-keyboard-close"
+              >
+                Đóng
+              </button>
+            </div>
+            
+            <div className="max-w-4xl mx-auto">
+              <Keyboard
+                onChange={onChangeInput}
+                onKeyPress={onKeyPress}
+                layoutName={layoutName}
+                theme="hg-theme-default tv-keyboard"
+                inputName={activeInput}
+                layout={{
+                  default: [
+                    "1 2 3 4 5 6 7 8 9 0 {bksp}",
+                    "q w e r t y u i o p",
+                    "a s d f g h j k l",
+                    "{caps} z x c v b n m",
+                    "{space} {enter}"
+                  ],
+                  shift: [
+                    "1 2 3 4 5 6 7 8 9 0 {bksp}",
+                    "Q W E R T Y U I O P",
+                    "A S D F G H J K L",
+                    "{caps} Z X C V B N M",
+                    "{space} {enter}"
+                  ]
+                }}
+                display={{
+                  '{bksp}': 'Xóa ⌫',
+                  '{enter}': 'Xong ✓',
+                  '{caps}': layoutName === 'default' ? 'CAPS' : 'caps',
+                  '{space}': 'Khoảng trắng'
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Overlay when keyboard is open */}
+      {showKeyboard && (
+        <div 
+          className="fixed inset-0 z-30"
+          onClick={closeKeyboard}
+        />
+      )}
     </div>
   );
 };

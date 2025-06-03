@@ -74,6 +74,18 @@ class APIService {
     }
     return response.json();
   }
+  
+  async assignSpinResult(familyId) {
+    const response = await fetch(`${API_BASE}/family/${familyId}/assign-spin`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    if (!response.ok) {
+      throw new Error('Failed to assign spin result');
+    }
+    return response.json();
+  }
 }
+
 
 export default new APIService();

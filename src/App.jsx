@@ -39,6 +39,7 @@ const App = () => {
 
   // MAIN RESET - Always go back to standby
   const resetToStandby = () => {
+    console.log("🏠 Going back to standby..."); // Add this line
     setCurrentStep("standby");
     setCheckinData(INITIAL_CHECKIN_DATA);
     setPrizeResult(null);
@@ -55,9 +56,6 @@ const App = () => {
       setMessage("");
       console.log("🎯 Starting check-in and spin process...");
 
-      // Refresh prize stats first
-      await refetchPrizeStats();
-
       // Check in the family
       console.log("📝 Checking in family:", checkinData);
       const checkinResult = await executeRequest(() =>
@@ -65,14 +63,38 @@ const App = () => {
       );
       console.log("✅ Check-in successful:", checkinResult);
 
-      // Determine rigged result based on prize availability
-      const riggedResult = determineRiggedResult(prizeStats);
-      console.log("🎰 Rigged result determined:", riggedResult);
+      // Get rigged result from backend (atomic assignment)
+      console.log("🎰 Requesting spin assignment from backend...");
+      const spinAssignment = await executeRequest(() =>
+        apiService.assignSpinResult(checkinResult.data._id)
+      );
+      console.log("✅ Backend assigned:", spinAssignment);
+
+      // Convert backend response to frontend format
+      const getColorForGroup = (group) => {
+        const colors = {
+          group_1: "#10B981",
+          group_2: "#3B82F6",
+          group_3: "#8B5CF6",
+          group_4: "#EF4444",
+        };
+        return colors[group] || "#6B7280";
+      };
+
+      const riggedResult = {
+        group: spinAssignment.data.spinResult,
+        challenges: spinAssignment.data.requiredChallenges,
+        label:
+          spinAssignment.data.spinResult === "group_1"
+            ? "CHÚC MỪNG BẠN ĐÃ NHẬN ĐƯỢC PHẦN THƯỞNG"
+            : "THAM GIA THỬ THÁCH",
+        color: getColorForGroup(spinAssignment.data.spinResult),
+      };
 
       // Set up the result
       setPrizeResult({
         ...riggedResult,
-        familyData: checkinResult.data,
+        familyData: spinAssignment.data,
       });
 
       // Go directly to wheel spin
@@ -82,25 +104,6 @@ const App = () => {
       // Start the wheel animation
       if (wheelRef.current) {
         wheelRef.current.startSpin(riggedResult);
-      }
-
-      // Update family with result in database
-      try {
-        console.log("💾 Updating family spin result in database...");
-
-        await executeRequest(() =>
-          apiService.updateFamilySpin(checkinResult.data._id, {
-            spinResult: riggedResult.group,
-            requiredChallenges: riggedResult.challenges,
-          })
-        );
-
-        console.log("💾 Database updated successfully");
-      } catch (updateError) {
-        console.error("❌ Failed to update database:", updateError);
-        setMessage(
-          "⚠️ Cập nhật cơ sở dữ liệu thất bại, nhưng kết quả vẫn hợp lệ"
-        );
       }
 
       // Update stats after successful spin
