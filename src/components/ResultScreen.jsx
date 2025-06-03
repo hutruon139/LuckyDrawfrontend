@@ -15,7 +15,7 @@ const ResultScreen = ({ spinResult, checkinData, onNewFamily, onGoHome }) => {
       case 1:
         return {
           title: "1 thử thách",
-          subtitle: "Hoàn thành 1 thử thách để rình quà về.",
+          subtitle: "Hoàn thành 1 thử thách để rinh quà về.",
           bgColor: "bg-blue-50",
           bgImage: "/assets/onechallenge.png",
         };
@@ -31,7 +31,7 @@ const ResultScreen = ({ spinResult, checkinData, onNewFamily, onGoHome }) => {
         return {
           title: "3 thử thách",
           subtitle:
-            "Đoàn kết, phối hợp và cùng nhau chinh phục 3 thử thách để dược nhận quà",
+            "Đoàn kết, cùng nhau chinh phục 3 thử thách để dược nhận quà",
           bgColor: "bg-orange-50",
           bgImage: "/assets/threechallenge.png",
         };
@@ -59,7 +59,7 @@ const ResultScreen = ({ spinResult, checkinData, onNewFamily, onGoHome }) => {
         <div className="bg-transparent rounded-4xl p-12 relative overflow-hidden mt-32">
           {/* Result Card */}
           <div
-            className={`bg-white rounded-2xl py-10 px-24 mt-20 mb-12 text-center border border-gray-200 bg-cover bg-center min-h-[600px] flex flex-col justify-center`}
+            className={`bg-white rounded-2xl py-10 px-24 mt-35 mb-12 text-center border border-gray-200 bg-cover bg-center min-h-[600px] flex flex-col justify-center`}
             style={{
               backgroundImage: `url('${cardContent.bgImage}')`,
               backgroundSize: "cover",
@@ -79,21 +79,25 @@ const ResultScreen = ({ spinResult, checkinData, onNewFamily, onGoHome }) => {
           </div>
 
           {/* Family Info Section */}
-          <div className="bg-white rounded-4xl p-20 mb-12">
-            <h4 className="text-3xl font-semibold text-center text-gray-700 mb-8">
-              Thông tin gia đình:
-            </h4>
-            <div className="text-3xl text-gray-600 max-w-md mx-auto">
-              <div className="flex gap-4">
-                <span>Họ và tên:</span>
-                <span className="font-medium">{checkinData.name}</span>
-              </div>
-              <div className="flex gap-4">
-                <span>ID nhân viên:</span>
-                <span className="font-medium">{checkinData.phone}</span>
-              </div>
-            </div>
-          </div>
+{/* Family Info Section */}
+<div className="bg-white rounded-4xl p-24 mb-12 shadow-lg">
+  <h4 className="text-4xl font-bold text-center text-gray-800 mb-12">
+    Thông tin gia đình
+  </h4>
+  <div className="bg-gray-50 rounded-2xl p-8 max-w-lg mx-auto">
+    <div className="space-y-6 text-2xl">
+      <div className="flex gap-3">
+        <span className="text-gray-600 font-medium ml-9">Họ và tên:</span>
+        <span className="text-gray-900 font-bold">{checkinData.name}</span>
+      </div>
+      <div className="flex gap-3">
+        <span className="text-gray-600 font-medium">ID nhân viên:</span>
+        <span className="text-gray-900 font-bold">{checkinData.phone}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
           {/* Back to Home Button - Red style matching design */}
           <button
             onClick={onGoHome}

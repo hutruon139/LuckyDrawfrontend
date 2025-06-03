@@ -11,6 +11,7 @@ const WheelSpinner = forwardRef(
     const [finalAngle, setFinalAngle] = useState(0);
     const [showResult, setShowResult] = useState(false);
     const [isInternalSpinning, setIsInternalSpinning] = useState(false);
+    const [hasBeenPressed, setHasBeenPressed] = useState(false);
     const wheelRef = useRef(null);
 
     // Updated segments to match your 8-segment wheel (2 segments per group)
@@ -107,10 +108,12 @@ const WheelSpinner = forwardRef(
           wheelElement.style.transition = "none";
           wheelElement.style.transform = "rotate(0deg)";
           void wheelElement.offsetWidth;
+          
         }
         setFinalAngle(0);
         setShowResult(false);
         setIsInternalSpinning(false);
+        setHasBeenPressed(false);
       },
     }));
 
@@ -124,20 +127,20 @@ const WheelSpinner = forwardRef(
           (targetSegment.startAngle + (targetSegment.endAngle + 360)) / 2;
         if (segmentCenter >= 360) segmentCenter -= 360;
       } else {
-        segmentCenter =
-          (targetSegment.startAngle + targetSegment.endAngle) / 2;
+        segmentCenter = (targetSegment.startAngle + targetSegment.endAngle) / 2;
       }
 
       // More dynamic spins based on segment
       const minSpins = 12;
       const maxSpins = 18;
-      const spins = minSpins + Math.floor(Math.random() * (maxSpins - minSpins + 1));
+      const spins =
+        minSpins + Math.floor(Math.random() * (maxSpins - minSpins + 1));
       const baseRotation = spins * 360;
-    
+
       const segmentRange = targetSegment.endAngle - targetSegment.startAngle;
       const randomOffset = (Math.random() - 0.5) * segmentRange * 0.6;
       const targetPosition = segmentCenter + randomOffset;
-    
+
       const targetAngle = baseRotation + (360 - targetPosition);
 
       console.log("🎯 Target Segment:", targetSegment.label);
@@ -289,18 +292,23 @@ const WheelSpinner = forwardRef(
           <div className="text-center mb-6">
             <button
               onClick={() => {
-                if (isInternalSpinning) return;
+                if (isInternalSpinning || hasBeenPressed) return;
+
+                setHasBeenPressed(true); // Disable the button immediately
+
                 if (onSpinStart) onSpinStart();
                 startSpin(prizeResult);
               }}
-              disabled={isInternalSpinning || !prizeResult}
+              disabled={isInternalSpinning || !prizeResult || hasBeenPressed}
               className="border-0 bg-transparent cursor-pointer transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50 hover:scale-110 active:scale-95 hover:drop-shadow-2xl"
             >
               <img
                 src="/assets/quay-button.png"
                 alt="Quay Button"
                 className={`w-auto h-auto pt-20 max-w-[500px] transition-all duration-200 ${
-                  isInternalSpinning ? "animate-pulse" : "hover:brightness-110"
+                  isInternalSpinning || hasBeenPressed
+                    ? "animate-pulse opacity-50"
+                    : "hover:brightness-110"
                 }`}
               />
             </button>
