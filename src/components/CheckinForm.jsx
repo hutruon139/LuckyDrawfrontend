@@ -37,6 +37,11 @@ const CheckinForm = ({
     } else if (activeInput === 'phone') {
       setCheckinData({ ...checkinData, phone: input });
     }
+    
+    // Auto-disable caps after typing first letter
+    if (layoutName === 'shift') {
+      setLayoutName('default');
+    }
   };
 
   const handleInputFocus = (inputType) => {

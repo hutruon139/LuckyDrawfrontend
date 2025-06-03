@@ -13,43 +13,86 @@ const WheelSpinner = forwardRef(
     const [isInternalSpinning, setIsInternalSpinning] = useState(false);
     const wheelRef = useRef(null);
 
-    // Wheel segments - YOUR ORIGINAL ANGLES
+    // Updated segments to match your 8-segment wheel (2 segments per group)
     const segments = [
+      // Segment 1 - Group 1
       {
         id: 1,
         group: "group_1",
-        label: "FREE BIB!",
-        color: "#10B981",
+        label: "PHẦN THƯỞNG",
         challenges: 0,
-        startAngle: 0,
-        endAngle: 15,
+        startAngle: 337.5,
+        endAngle: 22.5,
       },
+
+      // Segment 2 - Group 2
       {
         id: 2,
         group: "group_2",
-        label: "1 Challenge",
-        color: "#3B82F6",
+        label: "THAM GIA THỬ THÁCH",
         challenges: 1,
-        startAngle: 15,
-        endAngle: 150,
+        startAngle: 22.5,
+        endAngle: 67.5,
       },
+
+      // Segment 3 - Group 3
       {
         id: 3,
         group: "group_3",
-        label: "2 Challenges",
-        color: "#8B5CF6",
+        label: "THAM GIA THỬ THÁCH",
         challenges: 2,
-        startAngle: 150,
-        endAngle: 315,
+        startAngle: 67.5,
+        endAngle: 112.5,
       },
+
+      // Segment 4 - Group 4
       {
         id: 4,
         group: "group_4",
-        label: "3 Challenges",
-        color: "#EF4444",
+        label: "THAM GIA THỬ THÁCH",
         challenges: 3,
-        startAngle: 315,
-        endAngle: 360,
+        startAngle: 112.5,
+        endAngle: 157.5,
+      },
+
+      // Segment 5 - Group 1 (duplicate)
+      {
+        id: 5,
+        group: "group_1",
+        label: "PHẦN THƯỞNG",
+        challenges: 0,
+        startAngle: 157.5,
+        endAngle: 202.5,
+      },
+
+      // Segment 6 - Group 2 (duplicate)
+      {
+        id: 6,
+        group: "group_2",
+        label: "THAM GIA THỬ THÁCH",
+        challenges: 1,
+        startAngle: 202.5,
+        endAngle: 247.5,
+      },
+
+      // Segment 7 - Group 3 (duplicate)
+      {
+        id: 7,
+        group: "group_3",
+        label: "THAM GIA THỬ THÁCH",
+        challenges: 2,
+        startAngle: 247.5,
+        endAngle: 292.5,
+      },
+
+      // Segment 8 - Group 4 (duplicate)
+      {
+        id: 8,
+        group: "group_4",
+        label: "THAM GIA THỬ THÁCH",
+        challenges: 3,
+        startAngle: 292.5,
+        endAngle: 337.5,
       },
     ];
 
@@ -76,28 +119,37 @@ const WheelSpinner = forwardRef(
       const segmentCenter =
         (targetSegment.startAngle + targetSegment.endAngle) / 2;
 
-      // Fixed spins for consistency
-      const spins = 15;
-      const baseRotation = spins * 360; // 1800 degrees
+      // More dynamic spins based on segment
+      const minSpins = 12;
+      const maxSpins = 18;
+      const spins =
+        minSpins + Math.floor(Math.random() * (maxSpins - minSpins + 1));
+      const baseRotation = spins * 360;
 
-      // To land on the segment center, we need to rotate so that
-      // the segment center aligns with the pointer (at 0°/top)
-      // Since the wheel rotates clockwise, we need: 360 - segmentCenter
-      const targetAngle = baseRotation + (360 - segmentCenter);
+      // Add some randomness within the segment for more natural landing
+      const segmentRange = targetSegment.endAngle - targetSegment.startAngle;
+      const randomOffset = (Math.random() - 0.5) * segmentRange * 0.6; // Use 60% of segment range
+      const targetPosition = segmentCenter + randomOffset;
 
-      console.log("🎯 Target:", targetSegment.label);
+      // Calculate final angle to land on target position
+      const targetAngle = baseRotation + (360 - targetPosition);
+
+      console.log("🎯 Target Segment:", targetSegment.label);
       console.log("📐 Segment Center:", segmentCenter + "°");
-      console.log("🎪 Target Angle:", targetAngle + "°");
+      console.log("🎲 Random Offset:", randomOffset + "°");
+      console.log("🎪 Final Target Angle:", targetAngle + "°");
+      console.log("🌀 Total Spins:", spins);
 
       return targetAngle;
     };
 
     const startSpin = (targetResult) => {
-      console.log("🎪 Starting spin with:", targetResult);
+      console.log("🎪 Starting spin with predetermined result:", targetResult);
       setShowResult(false);
+      setIsInternalSpinning(true);
 
       if (!targetResult) {
-        // Random fallback for testing
+        console.warn("⚠️ No target result provided, using random fallback");
         const randomSegment =
           segments[Math.floor(Math.random() * segments.length)];
         targetResult = {
@@ -107,129 +159,120 @@ const WheelSpinner = forwardRef(
         };
       }
 
-      // Find matching segment
-      const targetSegment = segments.find(
+      // Find ALL matching segments for this group (FIXED - handles multiple segments per group)
+      const matchingSegments = segments.filter(
         (s) => s.group === targetResult.group
       );
-      if (!targetSegment) {
+
+      if (matchingSegments.length === 0) {
         console.error(
-          "❌ No matching segment found for group:",
+          "❌ No matching segments found for group:",
           targetResult.group
+        );
+        console.log(
+          "Available groups:",
+          segments.map((s) => s.group)
         );
         setIsInternalSpinning(false);
         return;
       }
+
+      // Randomly pick one of the matching segments
+      const targetSegment =
+        matchingSegments[Math.floor(Math.random() * matchingSegments.length)];
+
+      console.log(
+        `✅ Found ${matchingSegments.length} segments for ${targetResult.group}, selected segment ${targetSegment.id}`
+      );
 
       const targetAngle = calculateTargetAngle(targetSegment);
       setFinalAngle(targetAngle);
 
       const wheelElement = wheelRef.current;
       if (wheelElement) {
-        // Always reset to 0 first
+        // Reset wheel to starting position
         wheelElement.style.transition = "none";
         wheelElement.style.transform = "rotate(0deg)";
-        void wheelElement.offsetWidth;
+        void wheelElement.offsetWidth; // Force reflow
 
-        // Apply spin animation
+        // Apply the spin animation with more dynamic timing
         requestAnimationFrame(() => {
-          wheelElement.style.transition =
-            "transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99)";
+          const spinDuration = 3500 + Math.random() * 1000; // 3.5-4.5 seconds
+          wheelElement.style.transition = `transform ${spinDuration}ms cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
           wheelElement.style.transform = `rotate(${targetAngle}deg)`;
         });
-      }
 
-      // Show result after spin completes
-      setTimeout(() => {
-        setIsInternalSpinning(false);
-        setShowResult(true);
-        if (onSpinComplete) {
-          onSpinComplete({
-            ...targetSegment,
-            label: targetResult.label,
-          });
-        }
-      }, 4000);
+        // Complete the spin after animation
+        setTimeout(() => {
+          setIsInternalSpinning(false);
+          setShowResult(true);
+
+          if (onSpinComplete) {
+            onSpinComplete({
+              ...targetSegment,
+              label: targetResult.label, // Use the original label from the rigged result
+            });
+          }
+        }, 4500); // Wait slightly longer than the longest possible spin
+      }
     };
 
     const currentlySpinning = isSpinning || isInternalSpinning;
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 py-8">
-        <div className="max-w-2xl mx-auto px-4 text-center">
-          <div className="mb-8">
-            <h2 className="text-4xl font-bold text-white mb-4">
-              {isInternalSpinning
-                ? "🎰 ĐANG QUAY..."
-                : showResult
-                ? "🎉 KẾT QUẢ 🎉"
-                : "🎯 SẴN SÀNG QUAY!"}
-            </h2>
-            <p className="text-xl text-blue-200">
-              {isInternalSpinning
-                ? "Bánh xe đang xoay để chọn thử thách cho bạn!"
-                : showResult
-                ? "Chúc mừng! Đây là thử thách của bạn!"
-                : "Nhấn quay để biết thử thách của bạn!"}
-            </p>
-          </div>
-
+      <div
+        className="min-h-screen w-full bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center"
+        style={{
+          backgroundImage: `url('/assets/wheelbg.png')`,
+        }}
+      >
+        <div className="mx-auto px-4 text-center flex flex-col items-center">
           {/* Spinning Wheel Container */}
-          <div className="relative mx-auto w-96 h-96 mb-8">
-            {/* Main Wheel */}
-            <div
+          <div className="relative mx-auto w-[1000px] h-[1000px] mt-65">
+            {/* Main Wheel - Only this spins */}
+            <img
               ref={wheelRef}
-              className="w-full h-full rounded-full border-8 border-white shadow-2xl relative overflow-hidden"
+              src="/assets/Wheel.png"
+              alt="Spinning Wheel"
+              className="w-full h-full rounded-full shadow-2xl"
               style={{
                 transformOrigin: "center center",
                 willChange: "transform",
-                // YOUR ORIGINAL GRADIENT - not equal segments
-                background: `conic-gradient(
-                    #10B981 0deg 15deg,
-                    #3B82F6 15deg 150deg, 
-                    #8B5CF6 150deg 315deg,
-                    #EF4444 315deg 360deg
-                  )`,
               }}
-            >
-              {/* Segment dividers - YOUR ORIGINAL ANGLES */}
-              <div className="absolute inset-0 pointer-events-none">
-                <div
-                  className="absolute inset-0 border-r-2 border-white/50"
-                  style={{
-                    transform: "rotate(15deg)",
-                    transformOrigin: "center",
-                  }}
-                ></div>
-                <div
-                  className="absolute inset-0 border-r-2 border-white/50"
-                  style={{
-                    transform: "rotate(150deg)",
-                    transformOrigin: "center",
-                  }}
-                ></div>
-                <div
-                  className="absolute inset-0 border-r-2 border-white/50"
-                  style={{
-                    transform: "rotate(315deg)",
-                    transformOrigin: "center",
-                  }}
-                ></div>
-              </div>
+            />
 
-              {/* Center Hub */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-white font-bold text-xs bg-gradient-to-br from-gray-900 to-black rounded-full w-16 h-16 flex items-center justify-center border-4 border-white/40 shadow-xl cursor-pointer hover:bg-gray-800">
-                  <div className="text-center leading-tight">
-                    <div className="text-yellow-400 text-sm">⭐</div>
-                    <div className="text-[9px]">SPIN</div>
-                  </div>
-                </div>
-              </div>
+            {/* Center Arrow Pointer - Fixed position, larger size */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20 -mt-25 ml-5">
+              <img
+                src="/assets/arrow.png"
+                alt="Arrow Pointer"
+                className="drop-shadow-xl"
+                style={{
+                  width: "360px",
+                  height: "360px",
+                  minWidth: "180px",
+                  minHeight: "180px",
+                  objectFit: "contain",
+                  imageRendering: "crisp-edges",
+                  filter: "drop-shadow(0 6px 12px rgba(0,0,0,0.6))",
+                }}
+              />
             </div>
 
-            {/* Fixed Pointer at top (0°) */}
-            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-3 z-30">
-              <div className="w-0 h-0 border-l-[12px] border-r-[12px] border-b-[20px] border-l-transparent border-r-transparent border-b-yellow-400 drop-shadow-xl"></div>
+            {/* CSS Arrow Fallback - Always available as backup */}
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none z-10">
+              <div
+                className="bg-red-600 shadow-xl"
+                style={{
+                  width: "0",
+                  height: "0",
+                  borderLeft: "20px solid transparent",
+                  borderRight: "20px solid transparent",
+                  borderBottom: "60px solid #dc2626",
+                  filter: "drop-shadow(0 6px 12px rgba(0,0,0,0.6))",
+                  opacity: "0.8", // Slightly transparent so image arrow takes precedence
+                }}
+              />
             </div>
 
             {/* Wheel shadow */}
@@ -241,90 +284,20 @@ const WheelSpinner = forwardRef(
             <button
               onClick={() => {
                 if (isInternalSpinning) return;
-
-                let targetResult = prizeResult;
-                if (!targetResult) {
-                  const randomSegment =
-                    segments[Math.floor(Math.random() * segments.length)];
-                  targetResult = {
-                    group: randomSegment.group,
-                    label: randomSegment.label,
-                    challenges: randomSegment.challenges,
-                  };
-                }
-
                 if (onSpinStart) onSpinStart();
-                setIsInternalSpinning(true);
-                startSpin(targetResult);
+                startSpin(prizeResult);
               }}
-              disabled={isInternalSpinning}
-              className={`px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 ${
-                isInternalSpinning
-                  ? "bg-gray-500 cursor-not-allowed"
-                  : "bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 hover:scale-105"
-              } text-white shadow-xl`}
+              disabled={isInternalSpinning || !prizeResult}
+              className="border-0 bg-transparent cursor-pointer transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50 hover:scale-110 active:scale-95 hover:drop-shadow-2xl"
             >
-              {isInternalSpinning ? (
-                <span className="flex items-center justify-center gap-2">
-                  <RotateCw className="animate-spin" />
-                  Đang quay...
-                </span>
-              ) : (
-                "QUAY NGAY!"
-              )}
+              <img
+                src="/assets/quay-button.png"
+                alt="Quay Button"
+                className={`w-auto h-auto pt-20 max-w-[500px] transition-all duration-200 ${
+                  isInternalSpinning ? "animate-pulse" : "hover:brightness-110"
+                }`}
+              />
             </button>
-          </div>
-
-          {/* Result Display */}
-          {showResult && prizeResult && (
-            <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 mx-auto max-w-md border border-white/20 mb-6">
-              <div className="text-white space-y-3">
-                <div className="flex items-center justify-center space-x-2">
-                  <span className="text-2xl">🎊</span>
-                  <span className="font-bold text-lg">
-                    Kết quả đã được tiết lộ!
-                  </span>
-                </div>
-                <div className="border-t border-white/20 pt-3">
-                  <div className="flex items-center justify-center space-x-2 text-sm">
-                    <span>🎁</span>
-                    <span>
-                      Nhóm:{" "}
-                      <span className="font-semibold">{prizeResult.label}</span>
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-center space-x-2 text-sm mt-2">
-                    <span>⚡</span>
-                    <span>
-                      Thử thách:{" "}
-                      <span className="font-semibold">
-                        {prizeResult.challenges || 0}
-                      </span>
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Segment Guide */}
-          <div className="grid grid-cols-2 gap-2 max-w-xs mx-auto text-xs">
-            <div className="flex items-center space-x-1 text-green-300">
-              <span>🎁</span>
-              <span>Green = Free BIB</span>
-            </div>
-            <div className="flex items-center space-x-1 text-blue-300">
-              <span>🎯</span>
-              <span>Blue = 1 Challenge</span>
-            </div>
-            <div className="flex items-center space-x-1 text-purple-300">
-              <span>🏆</span>
-              <span>Purple = 2 Challenges</span>
-            </div>
-            <div className="flex items-center space-x-1 text-red-300">
-              <span>👑</span>
-              <span>Red = 3 Challenges</span>
-            </div>
           </div>
         </div>
       </div>

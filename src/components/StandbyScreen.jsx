@@ -169,18 +169,17 @@ const StandbyScreen = ({ onTouchToSpin, familyName }) => {
       )}
 
       {/* Default touch instruction - TRANSPARENT & SIMPLE */}
-{/* Default touch instruction - TRANSPARENT & SIMPLE */}
-{!familyName && (
-  <div className="absolute bottom-32 left-1/2 transform -translate-x-1/2 z-20">
-    <div className="bg-transparent px-10 py-6 hover:scale-105 transition-transform tv-standby-container">
-      <div className="text-center">
-        <div className="text-gray-700 text-center animate-pulse text-lg font-medium drop-shadow-md tv-standby-text">
-          Chạm vào màn hình để bắt đầu
+      {!familyName && (
+        <div className="absolute bottom-32 left-1/2 transform -translate-x-1/2 z-20">
+          <div className="bg-transparent px-10 py-6 hover:scale-105 transition-transform">
+            <div className="text-center">
+              <div className="text-gray-700 text-center animate-pulse text-lg font-medium drop-shadow-md">
+                Chạm vào màn hình để bắt đầu
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-)}
+      )}
     </div>
   );
 };

@@ -212,22 +212,10 @@ const App = () => {
             <div className="relative z-10 h-full">
               {/* Header - COMPACT for vertical layout */}
               {currentStep !== "standby" && currentStep !== "checkin" && (
-                <header className="text-center py-4 px-4 flex-shrink-0">
-                  <div className="flex items-center justify-center space-x-2 mb-2">
-                    <Trophy className="h-8 w-8 text-yellow-400" />
-                    <h1 className="tv-text-4xl font-bold text-white">
-                      Lucky Draw Challenge
-                    </h1>
-                    <Trophy className="h-8 w-8 text-yellow-400" />
-                  </div>
-                  <p className="tv-text-xl text-blue-200">
-                    Check-in và quay vòng may mắn để nhận thử thách!
-                  </p>
-
-                  {/* Admin button - positioned for vertical layout */}
+                <header className="absolute top-0 left-0 w-full z-50 p-4">
                   <button
                     onClick={() => setShowAdminLogin(true)}
-                    className="absolute top-4 right-4 text-white/50 hover:text-white tv-text-xl bg-white/10 px-3 py-1 rounded"
+                    className="text-white/70 hover:text-white text-lg bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition-all"
                   >
                     Admin
                   </button>
@@ -312,7 +300,7 @@ const App = () => {
               {currentStep === "standby" && (
                 <button
                   onClick={() => setShowAdminLogin(true)}
-                  className="absolute top-4 right-4 text-gray-600 hover:text-gray-800 tv-text-xl bg-white/50 px-4 py-2 rounded z-30"
+                  className="absolute top-4 left-4 text-gray-600 hover:text-gray-800 tv-text-xl bg-white/50 px-4 py-2 rounded z-30"
                 >
                   Admin
                 </button>
